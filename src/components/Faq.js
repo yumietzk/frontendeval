@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import { HiChevronDown, HiChevronRight } from 'react-icons/hi';
 import qas from '../data/questions';
 
+function initialState() {
+  return qas.reduce((acc, qa, index) => {
+    return { ...acc, [`question${index + 1}`]: qa.open };
+  }, {});
+}
+
 export default function Faq() {
-  const [isOpen, setIsOpen] = useState({
-    question1: true,
-    question2: false,
-    question3: false,
-  });
+  // const [isOpen, setIsOpen] = useState({
+  //   question1: true,
+  //   question2: false,
+  //   question3: false,
+  // });
+  const [isOpen, setIsOpen] = useState(initialState);
 
   const handleClick = (index) => {
     const key = `question${[index + 1]}`;
