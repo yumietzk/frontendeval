@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import InputForm from './InputForm';
+import Button from './Button';
 
 export default function Timer() {
-  const [hours, setHours] = useState(''); // string
-  const [minutes, setMinutes] = useState('');
-  const [seconds, setSeconds] = useState('');
+  const [time, setTime] = useState({
+    hours: '',
+    minutes: '',
+    seconds: '',
+  });
   const [isCounting, setIsCounting] = useState(false);
   const [isPausing, setIsPausing] = useState(false);
+
+  const { hours, minutes, seconds } = time;
+
+  const handleTime = (hours = '', minutes = '', seconds = '') => {
+    setTime({ ...time, hours, minutes, seconds });
+  };
+
+  const paddedTime = (time) => {
+    return time.padStart(2, '0');
+  };
 
   useEffect(() => {
     let time = (+hours * 60 + +minutes) * 60 + +seconds;
@@ -21,10 +35,9 @@ export default function Timer() {
           if (result === 'denied') alert('Timer finished');
         });
 
+        handleTime();
         setIsCounting(false);
-        setHours('');
-        setMinutes('');
-        setSeconds('');
+
         return;
       }
 
@@ -35,9 +48,11 @@ export default function Timer() {
         const newMinutes = Math.trunc((time - 60 * newHours * 60) / 60);
         const newSeconds = time - 60 * newHours * 60 - newMinutes * 60;
 
-        setHours(newHours.toString().padStart(2, '0'));
-        setMinutes(newMinutes.toString().padStart(2, '0'));
-        setSeconds(newSeconds.toString().padStart(2, '0'));
+        const paddedHours = paddedTime(newHours.toString());
+        const paddedMinutes = paddedTime(newMinutes.toString());
+        const paddedSeconds = paddedTime(newSeconds.toString());
+
+        handleTime(paddedHours, paddedMinutes, paddedSeconds);
       }
     }, 1000);
 
@@ -47,13 +62,15 @@ export default function Timer() {
   const handleStart = () => {
     setIsCounting(true);
 
-    if (!hours) setHours('00');
-    if (!minutes) setMinutes('0');
-    if (!seconds) setSeconds('00');
+    if (!hours) setTime({ ...time, hours: '00' });
+    if (!minutes) setTime({ ...time, minutes: '00' });
+    if (!seconds) setTime({ ...time, seconds: '00' });
 
-    setHours(hours.padStart(2, '0'));
-    setMinutes(minutes.padStart(2, '0'));
-    setSeconds(seconds.padStart(2, '0'));
+    const paddedHours = paddedTime(hours);
+    const paddedMinutes = paddedTime(minutes);
+    const paddedSeconds = paddedTime(seconds);
+
+    handleTime(paddedHours, paddedMinutes, paddedSeconds);
   };
 
   const handlePause = () => {
@@ -65,79 +82,26 @@ export default function Timer() {
     setIsCounting(false);
     setIsPausing(false);
 
-    setHours('');
-    setMinutes('');
-    setSeconds('');
+    handleTime();
   };
 
   return (
     <>
       <h1>Countdown timer</h1>
       <form>
-        <div>
-          {isCounting || isPausing ? (
-            hours
-          ) : (
-            <input
-              id="hours"
-              type="number"
-              aria-label="Hours"
-              value={hours}
-              placeholder="HH"
-              onChange={(e) => setHours(e.target.value)}
-            />
-          )}{' '}
-          :{' '}
-          {isCounting || isPausing ? (
-            minutes
-          ) : (
-            <input
-              id="minutes"
-              type="number"
-              aria-label="Minutes"
-              value={minutes}
-              placeholder="MM"
-              onChange={(e) => setMinutes(e.target.value)}
-            />
-          )}{' '}
-          :{' '}
-          {isCounting || isPausing ? (
-            seconds
-          ) : (
-            <input
-              id="seconds"
-              type="number"
-              aria-label="Seconds"
-              value={seconds}
-              placeholder="SS"
-              onChange={(e) => setSeconds(e.target.value)}
-            />
-          )}
-        </div>
-
-        {isCounting ? (
-          <>
-            <button type="button" onClick={handlePause}>
-              Pause
-            </button>
-            <button type="button" onClick={handleReset}>
-              Reset
-            </button>
-          </>
-        ) : !isCounting && isPausing ? (
-          <>
-            <button type="button" onClick={handleStart}>
-              Start
-            </button>
-            <button type="button" onClick={handleReset}>
-              Reset
-            </button>
-          </>
-        ) : (
-          <button type="button" onClick={handleStart}>
-            Start
-          </button>
-        )}
+        <InputForm
+          isCounting={isCounting}
+          isPausing={isPausing}
+          time={time}
+          setTime={setTime}
+        />
+        <Button
+          isCounting={isCounting}
+          isPausing={isPausing}
+          handleStart={handleStart}
+          handlePause={handlePause}
+          handleReset={handleReset}
+        />
       </form>
     </>
   );
