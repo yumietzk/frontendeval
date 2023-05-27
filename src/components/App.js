@@ -1,7 +1,8 @@
 import React from 'react';
+import MortgageForm from './MortgageForm';
 
 const App = () => {
-  return <p>Hello</p>;
+  return <MortgageForm />;
 };
 
 export default App;
