@@ -28,14 +28,14 @@ export default function Modal({ setShowModal, setAcceptOffer }) {
   return (
     <div
       ref={ref}
-      className="relative w-9/12 h-4/5 border-2 border-black flex flex-col items-center"
+      className="relative w-9/12 h-4/5 border-2 border-black flex flex-col items-center z-10 bg-white"
     >
       <p className="basis-9/12 text-lg flex flex-row content-center items-center">
         Click the button below to accept our amazing offer!
       </p>
       <button
         type="button"
-        className="w-28 h-16 border-2 border-black"
+        className="w-28 h-16 border-2 border-black bg-slate-200"
         onClick={handleAcceptOffer}
       >
         Accept offer
@@ -43,10 +43,10 @@ export default function Modal({ setShowModal, setAcceptOffer }) {
 
       <button
         type="button"
-        className="absolute top-0 left-0 w-16 h-16 flex justify-center items-center"
+        className="absolute top-3 left-3 w-11 h-11 flex justify-center items-center border-2 border-black bg-slate-200"
         onClick={() => setShowModal(false)}
       >
-        <AiOutlineClose className="w-8 h-8" />
+        <AiOutlineClose className="w-5 h-5" />
       </button>
     </div>
   );
