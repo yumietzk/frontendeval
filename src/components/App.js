@@ -1,49 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import History from './History';
+import handleButtonChange from '../utilities/handleButtonChange';
 
 // This one allows the user to undo up to the last 5 actions
+// ex. [{10, 0}, {100, 10}, {-100, 110}, {1, 10}, {10, 11}]
 const App = () => {
   const [prevCounts, setPrevCounts] = useState([]);
   const [currentCount, setCurrentCount] = useState(0);
-  const [button, setButton] = useState({
-    undo: true,
-    redo: true,
-    count: false,
-  });
   const [poppedItem, setPoppedItem] = useState([]);
   const [firstTime, setFirstTime] = useState({ click: true, undo: true });
 
-  const { undo, redo, count } = button;
-
-  useEffect(() => {
-    const length = prevCounts.length;
-
-    if (length === 0) {
-      if (!firstTime.undo) {
-        setButton({ ...button, undo: true, redo: false, count: false });
-      } else {
-        setButton({
-          ...button,
-          undo: true,
-          count: false,
-        });
-      }
-    }
-
-    if (length >= 1 && length < 5) {
-      if (!firstTime.undo) {
-        setButton({ ...button, undo: false, redo: false, count: false });
-      } else {
-        setButton({ ...button, undo: false, count: false });
-      }
-    }
-
-    if (length === 5) {
-      setButton({ ...button, undo: false, redo: true, count: true });
-    }
-  }, [prevCounts]);
-
-  // [{10, 0}, {100, 10}, {-100, 110}, {1, 10}, {10, 11}]
+  const button = handleButtonChange(prevCounts, firstTime);
 
   const handleCount = (value) => {
     if (value.includes('+')) {
@@ -120,10 +87,20 @@ const App = () => {
       <div>Undoable counter</div>
 
       <div>
-        <button type="button" value="Undo" disabled={undo} onClick={handleUndo}>
+        <button
+          type="button"
+          value="Undo"
+          disabled={button.undo}
+          onClick={handleUndo}
+        >
           Undo
         </button>
-        <button type="button" value="Redo" disabled={redo} onClick={handleRedo}>
+        <button
+          type="button"
+          value="Redo"
+          disabled={button.redo}
+          onClick={handleRedo}
+        >
           Redo
         </button>
       </div>
@@ -133,7 +110,7 @@ const App = () => {
           <button
             type="button"
             value="-100"
-            disabled={count}
+            disabled={button.count}
             onClick={handleClick}
           >
             -100
@@ -141,7 +118,7 @@ const App = () => {
           <button
             type="button"
             value="-10"
-            disabled={count}
+            disabled={button.count}
             onClick={handleClick}
           >
             -10
@@ -149,7 +126,7 @@ const App = () => {
           <button
             type="button"
             value="-1"
-            disabled={count}
+            disabled={button.count}
             onClick={handleClick}
           >
             -1
@@ -160,7 +137,7 @@ const App = () => {
           <button
             type="button"
             value="+1"
-            disabled={count}
+            disabled={button.count}
             onClick={handleClick}
           >
             +1
@@ -168,7 +145,7 @@ const App = () => {
           <button
             type="button"
             value="+10"
-            disabled={count}
+            disabled={button.count}
             onClick={handleClick}
           >
             +10
@@ -176,7 +153,7 @@ const App = () => {
           <button
             type="button"
             value="+100"
-            disabled={count}
+            disabled={button.count}
             onClick={handleClick}
           >
             +100
