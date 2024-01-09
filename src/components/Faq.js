@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HiChevronDown, HiChevronRight } from 'react-icons/hi';
+import Button from './Button';
 import qas from '../data/questions';
 
 function initialState() {
@@ -30,17 +30,7 @@ export default function Faq() {
           className="border border-neutral-500 rounded-md m-2 mr-20 p-5"
         >
           <h2 className="text-lg font-semibold flex justify-start content-center">
-            <button
-              type="button"
-              className="mr-2"
-              onClick={() => handleClick(i)}
-            >
-              {isOpen[`question${[i + 1]}`] ? (
-                <HiChevronDown className="w-7 h-7 text-emerald-600" />
-              ) : (
-                <HiChevronRight className="w-7 h-7 text-emerald-600" />
-              )}
-            </button>
+            <Button isOpen={isOpen} index={i} handleClick={handleClick} />
             {qa.question}
           </h2>
           {isOpen[`question${[i + 1]}`] && (
