@@ -1,13 +1,13 @@
-import { MouseEventHandler } from 'react';
+import React from 'react';
 import { HiChevronDown, HiChevronRight } from 'react-icons/hi';
 
-type Props = {
+type ButtonProps = {
   isOpen: object;
   index: number;
-  handleClick: MouseEventHandler;
+  handleClick(index: number): void;
 };
 
-function Button({ isOpen, index, handleClick }: Props) {
+function Button({ isOpen, index, handleClick }: ButtonProps) {
   return (
     <button type="button" className="mr-2" onClick={() => handleClick(index)}>
       {isOpen[`question${[index + 1]}`] ? (

@@ -16,10 +16,10 @@ export default function Faq() {
   // });
   const [isOpen, setIsOpen] = useState(initialState);
 
-  const handleClick = (index) => {
+  function handleClick(index: number) {
     const key = `question${[index + 1]}`;
     setIsOpen({ ...isOpen, [key]: !isOpen[key] });
-  };
+  }
 
   return (
     <>
